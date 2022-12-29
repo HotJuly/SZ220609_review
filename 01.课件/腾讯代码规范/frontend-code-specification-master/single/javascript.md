@@ -1,0 +1,17 @@
+# 参考：
+    - Airbnb ES6
+        - https://github.com/airbnb/javascript
+    - Airbnb ES5
+        - https://github.com/airbnb/javascript/tree/es5-deprecated/es5
+    - Google Style Guide
+        - https://google.github.io/styleguide/jsguide.html
+    - W3Schools
+        - https://www.w3schools.com/js/js_conventions.asp
+    - Sport Ngin
+        - http://sportngin.github.io/styleguide/javascript.html
+    - idiomatic.js
+        - https://github.com/rwaldron/idiomatic.js/tree/master/translations/zh_CN
+    - Standard
+    - node-style-guide
+    - npm’s "funny" coding style
+    - WordPress

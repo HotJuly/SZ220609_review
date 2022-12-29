@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <button id="btn">发送请求</button>
+    <script>
+        // 全局声明变量用于存储后续返回的数据
+        var data;
+
+        // 声明一个函数,用于接收数据,并存储到全局的data变量中
+        function getData(data){
+            console.log(data)
+            window.data=data
+        }
+
+        btn.onclick=function(){
+            let script = document.createElement('script');
+            script.src="http://localhost:5000/jsonp?callback=getData"
+            document.body.appendChild(script);
+        }
+    </script>
+</body>
+</html>
