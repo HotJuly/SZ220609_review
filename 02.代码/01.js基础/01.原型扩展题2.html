@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      /*
+        注意:
+          1.读取属性:如果对象没有该属性,就会顺着原型链想上查找
+          2.设置属性:如果对象没有该属性,那么就会给当前对象新增该属性
+              也就是说,设置属性不会走原型链
+      */
+
+      function Person(name) {
+        this.name = name;
+      }
+
+      Person.prototype.c = 1;
+
+      var p1 = new Person("xiaoming");
+
+      // p1.c = p1.c + 1;
+      // p1.c = (p1.c + 1);
+      // p1.c = (p1.__proto__.c + 1);
+      // p1.c = (Person.prototype.c + 1);
+      // p1.c = (1 + 1);
+      // p1.c = 2;
+      p1.c+=1;
+
+      console.log(p1,p1.c,Person.prototype.c)
+    </script>
+  </body>
+</html>

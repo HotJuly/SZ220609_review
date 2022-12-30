@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      /*
+            构造函数
+                目的:为了创建自己的实例对象
+                注意:
+                    1.平常所说首字母大写的是构造函数,这个规则是约定俗成的
+                        但是这个规则是可以违反的
+
+                    2.只有在函数被调用的时候,才能确定一个函数是否是构造函数
+                        也就是说,通过函数的声明,是没办法知道这个函数是不是构造函数的
+        */
+
+      /*
+            在js中,内存分为几块区域?
+                栈内存
+                    只能存放基本数据类型,对象的地址值以及标识
+
+                堆内存
+                    可以存放对象数据类型,基本数据类型
+                        堆内存想要存放基本数据类型,必须通过对象的属性进行存储
+
+                注意:其实函数名和变量是同一个东西,统称为标识
+        
+        */
+
+      /*
+        原型相关
+            1.原型是什么?
+                原型其实就是两个属性和一个对象
+
+                1.每个实例对象都具有隐式原型属性(指的是__proto__)
+                2.每个构造函数都具有显式原型属性(指的是prototype)
+                  每个构造函数在创建的时候,都会伴生一个原型对象
+
+                  问题:请问普通函数是否具有原型对象?
+                    每个函数都具有自己的原型对象,只是如果是普通函数,他没有自己的实例对象的话,原型对象就没有用
+
+                3.实例对象的隐式原型指向了构造函数的显式原型
+                4.所有是原型对象都具有constructor属性,指向自己对应的构造函数
+
+                注意:在js代码中,可能出现对象结构嵌套写法,
+                    但实际上在内存中,所有的对象都是兄弟关系,只是身上可能会有对方的地址值
+
+            2.为什么要有原型?(也就是说原型的用处是什么)
+                如果一个实例对象想要使用一个属性,但是自身没有该属性,js会就顺着__proto__属性向上查找
+                    找到对应构造函数的原型对象,如果原型对象上具有该属性,那么就是用该属性,否则继续向上查找
+
+                最终目的:就是为了节省内存空间,将所有实例对象都具有的方法放在原型对象上,方便大家使用
+
+            3.怎么使用原型?
+        
+        */
+      // function Person(){
+      // }
+
+      // function person(){
+      // }
+
+      // var p1 = Person();
+      // console.log(p1)
+
+      // var p2 = new person();
+      // console.log(p2)
+
+      //----------------------------
+      // 此处在执行函数声明,又称为执行函数定义,不会执行函数体代码
+      // 函数声明就是在堆内存中创建一个函数对象
+      function Person(name) {
+        this.name = name;
+        // this.eat = function(){
+        //     console.log('eat!!!!!');
+        // }
+      }
+
+      //   Person.prototype.eat = function () {
+      //     console.log("eat!!!!!");
+      //   };
+
+      var p1 = new Person("xiaoming");
+      //   var p2 = new Person("xiaoming");
+
+      //   console.log(p1.__proto__.eat === p2.__proto__.eat);
+      //   console.log(p1.eat === p2.eat);
+      //   p1.eat();
+      //   p2.eat();
+
+      console.log(p1);
+
+      //-----------------------------------------------
+      /*
+        new做的事情
+            1.自动声明形参,并将传入的实参赋值给形参
+            2.会自动声明关键字this,还会创建一个对象存入其中
+            3.将构造函数当前这一瞬间的的显式原型属性的值,赋值给实例对象的隐式原型属性
+            4.会自动返回this
+
+            注意:形参其实就是函数内部的局部变量
+      */
+        function Dog(name){
+            var that = {};
+            that.__proto__ = Dog.prototype;
+
+            that.name = name;
+            return that;
+        }
+
+        var d1 = Dog("pika");
+        console.log(d1)
+    </script>
+  </body>
+</html>

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        /*
+            需求:现在具有一个变量data,data中会存储数据,请输出data中数据的数据类型
+
+            辨别一个数据的数据类型的方法:
+                1.typeof
+                    语法:typeof data
+                    返回值数据类型:string
+                    返回值:"string","number","boolean","undefined","object","function","symbol","bigint"
+
+                    优点:
+                        可以快速分辨出数据的数据类型
+
+                    缺点:
+                        1.null会被误识别为object对象
+                            原因:因为数据存储在内存中,都是二进制存储的
+                                而对象的前三位是000,null的前三位也是000,所以会被误识别为对象类型
+
+                        2.无法准确分辨对象数据类型
+
+                2.instanceof
+                    语法:A instanceof B
+                    返回值数据类型:boolean
+                    返回值:true||false
+
+                    优点:
+                        可以快速精准的判断A是不是B数据类型的
+
+                    缺点:
+                        他无法判断A是哪种数据类型
+
+                    原理:其实就是在通过__proto__和prototype属性进行比较
+                        如果A的原型链上,出现了B的原型对象,那么就说明A是B类型的(或者说B是A的构造函数)
+
+                3.借用Object的toString方法
+                    通过call方法,强行调用Object原型对象上的toString方法
+                        并将this改为data即可,最终会输出一段字符串"[object 构造函数名称]"
+
+        */
+
+        // var data = [1,2,3];
+        var data = new Date();
+        // console.log(typeof data)
+        // console.log(data instanceof Array)
+        var result = Object.prototype.toString.call(data).split(' ')[1].replace(']','');
+        console.log(result)
+    </script>
+</body>
+</html>

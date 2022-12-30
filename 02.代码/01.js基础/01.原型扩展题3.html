@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        /*
+            当给一个基本数据类型的数据添加/读取属性时,
+                如果是number,string,boolean这三者,
+                    他就会创建一个对应的包装类对象,并给该对象添加属性值
+                        基本数据类型->string  对象数据类型->String
+                        基本数据类型->number  对象数据类型->Number
+                        基本数据类型->boolean  对象数据类型->Boolean
+            注意:产生的包装类对象,只会存活一瞬间,当前代码执行结束,就会被立即销毁
+        
+        */
+        // String.prototype.title = "666";
+
+        var str = "hello";
+        // 由于此行代码在给基本数据类型的"hello"添加属性,所以会临时创建一个对应的包装类对象,防止语法出错
+        // 但是这个对象执行完该代码就立即销毁了,不会影响到str中存储的结果
+        str.title = "world";
+
+        // 由于此行代码又读取了str的属性值,所以又临时创建一个对应的包装类对象
+        console.log(str + str.title)
+
+
+        var num = 123;
+        num.count = 4;
+        console.log(num + num.count)
+    </script>
+</body>
+</html>

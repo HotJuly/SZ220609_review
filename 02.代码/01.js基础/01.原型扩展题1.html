@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      /*
+        原型相关面试题注意点:
+            1.观察清楚,当前到底是在给原型对象添加属性,还是更换原型对象
+            2.如果是更换原型对象,是在new之前更换的,还是new之后更换的
+        */
+      function Person(name) {
+        this.name = name;
+      }
+
+      // Person.prototype.c = 1;
+      //   Person.prototype = {
+      //     c: 1,
+      //   };
+
+      var p1 = new Person("xiaoming");
+
+      //   Person.prototype.c = 1;
+      Person.prototype = {
+        c: 1,
+      };
+
+      var p2 = new Person("xiaohong");
+
+      console.log(p1.c, p2.c);
+    </script>
+  </body>
+</html>
