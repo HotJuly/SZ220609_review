@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      /* 
+        使用构造函数设计并测试以下需要
+        需求1: 
+            现在1个人, 有姓名与年龄(值自己指定), 能自我介绍自己的姓名和年龄, 能得到当前的总人数
+        需求2: 
+            现在又有了一个学生, 它有身价的属性, 能介绍它的所有信息
+        */
+
+      // 构造函数出现的目的,不是为了创建对象,而是为了对创建得到的对象进行类型细分
+      // 可以实现,当前类型的对象都是使用相同的方法,不是该类型的对象,就无法享受到这些方法
+      function Person(name, age) {
+        this.name = name;
+        this.age = age;
+        Person.count += 1;
+      }
+
+      Person.prototype.say = function () {
+        console.log(
+          `我是${this.name},我今年${this.age}岁,现在一共有${Person.count}个人`
+        );
+      };
+
+      //   放在构造函数身上的属性,成为静态属性
+      // 放在构造函数身上的方法,成为静态方法
+      // Array.from() ->  可以将伪数组转成真数组
+      Person.count = 0;
+
+      var p1 = new Person("xiaoming", 23);
+      //   console.log(p1.count)
+        // p1.say();
+
+      function Student(name, age, price) {
+        // this.name = name;
+        // this.age = age;
+
+        // call方法第一个实参可以强行改变前面函数的this
+        // call方法从第二个参数开始,都会传递给前面的函数,作为实参使用
+
+        // 这一行代码,就是为了获取到人对象所拥有的所有属性的
+        Person.call(this, name, age);
+        this.price = price;
+      }
+
+        // Student.prototype = Person.prototype;
+      Student.prototype = new Person();
+
+    //   父类具有的方法,子类也创建一个同名的方法,这个操作称为重写
+      Student.prototype.say = function(){
+        console.log(`我是${this.name},我今年${this.age}岁,我有${this.price}钱,现在一共有${Person.count}个人`)
+      }
+
+      var s1 = new Student("xiaoming", 23, 100000000);
+      s1.say();
+      
+      p1.say();
+      //   console.log(s1)
+
+      /*
+      继承
+        目的:就是为了让一个类型的实例对象,能够使用到另外一个类型的方法
+        原理:通过原型链实现继承操作
+        流程:
+            1.必须保证学生对象具有人对象所有的特点(属性)
+                通过借调父类构造函数,来加工子类的实例对象,从而获取到所有的属性
+
+            2.必须保证学生对象能使用到人对象能用的所有方法
+                通过修改Student的prototype属性,将其改为父类的实例对象,来实现继承所有方法的效果
+                因为此时Student的实例对象的原型链上,已经出现了Person的原型对象
+    
+    */
+    </script>
+  </body>
+</html>

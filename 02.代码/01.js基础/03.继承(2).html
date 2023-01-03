@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      /* 
+          使用class设计并测试以下需要
+          需求1: 
+              现在1个人, 有姓名与年龄(值自己指定), 能自我介绍自己的姓名和年龄, 能得到当前的总人数
+          需求2: 
+              现在又有了一个学生, 它有身价的属性, 能介绍它的所有信息
+          */
+
+      /*
+            class注意点:
+                1.在class中,书写的属性都会放在实例对象身上,成为实例对象的属性
+                2.在class中,书写的方法如果使用ES6简写语法,那么该方法就会存在于原型对象身上
+                    反之,如果没有使用ES6简写语法,那么无论是属性还是方法都放在实例对象上
+                3.在class中,在属性或者方法前面书写static关键字,
+                    那么该属性或者方法就会放在构造函数身上,成为静态属性或者静态方法
+                4.super的使用方法
+                    1.当作函数使用
+                        只要使用的extends关键字的类,必须在constructor中调用super方法,否则会报错
+                        就相当于组合继承中的Person.call(this,name,age)
+
+                    2.当作对象使用
+                        在constructor中使用,想当于是父类的原型对象
+                        在静态方法中使用的话,相当于是父类构造函数本身
+
+
+
+            问题:请问属性和方法是什么关系?
+            回答:
+                方法其实是特殊的属性,特殊在属性值是函数类型
+        
+        */
+
+      var obj = {
+        name: "xiaoming",
+        say: function () {},
+      };
+
+      class Person {
+        constructor(name, age) {
+          this.name = name;
+          this.age = age;
+
+          Person.count++;
+        }
+
+        a = 1;
+
+        static count = 0;
+
+        static say() {
+          console.log(
+            `我是${this.name},我今年${this.age}岁,现在一共有${Person.count}人`
+          );
+        }
+      }
+
+      var p1 = new Person("xiaoming", 23);
+      // p1.say();
+      // console.dir(Person)
+
+      class Student extends Person {
+        constructor(name, age, price) {
+          //   this.name = name;
+          //   this.age = age;
+
+        //   此行代码就相当于组合继承中的Person.call(this,name,age)
+          super(name, age);
+          this.price = price;
+
+        }
+
+        static say(){
+            console.log('111111')
+            super.say();
+        }
+      }
+
+      var s1 = new Student("xiaoming", 23, 1000000);
+    //   s1.say();
+    Student.say();
+    //   console.log(s1);
+    </script>
+  </body>
+</html>
