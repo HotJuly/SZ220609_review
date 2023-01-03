@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      /*
+        在编程界中,作用域一共分为两种
+            1.词法作用域(又称为静态作用域)
+                当前作用域,与函数的声明位置有关,与调用位置无关
+
+            2.动态作用域
+                当前作用域,与函数的声明位置无关,与调用位置有关
+
+        1.作用域是什么?
+            约束了变量的作用范围
+            他是变量的查找规则
+
+            注意:js中只有词法作用域(静态作用域)
+
+        2.作用域重点:预解析(变量提升)
+            预解析分为两种:
+                1.变量提升
+                    变量提升,是局部提升,会将标识的声明提升到最顶端,但是标识的赋值会留在原地
+
+                2.函数提升
+                    函数提升,是整体提升,会将标识的声明和赋值都提升到最顶端
+
+                注意:函数表达式的提升,是变量提升,会将变量声明进行提升,函数赋值留在原地
+
+            注意点:
+                区分清楚标识的声明和标识的赋值
+                代码:var a = 1;
+                标识声明:var a;
+                标识赋值:a = 1;
+
+        3.预解析的优先级
+            函数提升优先于变量提升
+
+        4.预解析的范围
+            只会提升到当前作用域的最顶端,不会穿透作用域
+
+            注意:作用域中变量的查找,是可以从内向外的,但是不能从外向内
+
+        5.作用域分类
+            1.全局作用域
+                写在script标签中的代码,这块区域就是全局作用域
+                该作用域,可以被所有人使用
+
+                扩展:其实js引擎会将script标签中的代码,放在一个函数里面执行
+                    所以全局其实也是一个函数
+
+            2.局部作用域(又称为函数作用域)
+                每个函数声明的时候,都会创建一片属于自己的作用域
+                该作用域,除了它内部以外,外层是不可见的
+
+            3.块级作用域
+                该作用域是ES6新增的作用域,必须使用let或者const才会出现
+
+                扩展:在全局使用let声明变量,那么这个变量会存储于块级作用域中
+                    而这个块级作用域是仅次于全局作用域的一个作用域
+
+            注意点:作用域限制的是变量的使用范围,不是变量值的使用范围
+    */
+
+      // var a = 1;
+
+      // function wrap(){
+      //     var a = 2;
+
+      //     function inner(){
+      //         console.log(a)
+      //     }
+
+      //     return inner;
+      // }
+
+      // var inner = wrap();
+      // inner();
+
+      //------------------------
+      // console.log(a)
+      // var a = 1;
+      // console.log(a)
+
+      // var a;
+      // console.log(a)
+      // a=1;
+
+      //--------------------------
+      // console.log(a)
+      // function a(){
+      //     console.log('abc')
+      // }
+
+      //---------------------------
+
+      // console.log(a)
+      // var a = function(){
+      //     console.log('abc')
+      // }
+
+      //-----------------------
+      // console.log(a)
+      // var a = 3;
+      // function a(){
+      //     console.log('abc')
+      // }
+
+      // function a(){
+      //     console.log('abc')
+      // }
+      // var a ;
+      // console.log(a)
+      // a=3;
+
+      //--------------------------
+
+      // var a = 1;
+
+      // function a(){
+      //     console.log(2)
+      // }
+
+      // console.log(a)
+
+      // var a = function(){
+      //     console.log(3)
+      // }
+
+      // function a(){
+      //     console.log(2)
+      // }
+      // var a;
+      // var a
+      // a=1;
+      // console.log(a)
+      // a = function(){
+      //     console.log(3)
+      // }
+
+      //--------------------------------------------------
+      // var a = 1;
+
+      // function wrap(){
+      //     // var a = 2;
+      //     var b = 3;
+      //     console.log(a,b);
+      // }
+
+      // wrap();
+      // console.log(a,b);
+
+      //---------------------------------
+      var x = 1;
+      let obj = {
+          x:2,
+          fn:function(){
+              console.log(1,x);
+          }
+      }
+      obj.fn();
+      console.log(2,x)
+
+    //   if (true) {
+    //     let a = 1;
+    //     console.log(a);
+    //   }
+    //   console.log(a);
+
+    //----------------------------------
+    // let a = 1;
+    // window.a = 2;
+    // console.log(a)
+    </script>
+  </body>
+</html>
