@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        /*
+            闭包
+            1.闭包的产生条件
+                闭包是引用关系
+                1.必须有内外函数嵌套
+                2.内部函数必须使用到外部函数的变量
+
+                个人理解,闭包分为两种:
+                    1.有效闭包
+                        外部函数将内部函数return出去,让闭包能够长期存活,那么成为有效闭包
+
+                    2.无效闭包
+                        外部函数没有将内部函数return出去,闭包在外部函数执行结束之后会立即销毁,
+                        那么成为无效闭包
+
+                注意:闭包的产生条件只有以上两个,不需要其他条件
+
+            2.闭包的产生时机
+                外部函数调用的时候
+
+            3.闭包的优点
+                延长局部变量的生命周期
+                    当外部函数调用结束的时候,外部函数的执行上下文应该要出栈销毁(变量对象也会销毁),
+                        但是由于内部函数inner,他需要使用到外层的a变量,那么这个a变量就不能销毁,
+                            所以js最终会为其生成一个闭包对象,用于存储这个a变量
+                    其实就是本该死的变量,被保留下来了
+
+                实现js模块化效果
+                    可以将内部作用域的变量暴露出去给外部使用
+                        让外部作用域能够操作内部的数据
+
+            4.闭包的缺点(副作用)
+                由于闭包会保存一些本来会被销毁的变量,最终会占用非常多的内存空间
+
+                内存泄漏
+                    由于代码层面的原因,导致一个功能需要花费更多的内存去实现(简单说就是浪费了内存)
+
+                内存溢出
+                    由于内存泄漏过多,导致电脑内存被存满了,无法继续负担当前项目的运行,
+                        最终程序宕机,无法正常使用
+
+            5.如何解决闭包的副作用?
+                尽量少使用闭包
+                把已经使用完了的闭包及时释放掉
+                    问题:为什么闭包会存活?
+                    原因:因为闭包正在被内部函数引用着,所以浏览器的垃圾回收机制无法成功回收他
+                        垃圾回收机制只会回收没有人引用的对象
+                    解决方案:将使用闭包的内部函数及时释放掉,那么内部函数就会被垃圾回收机制回收掉,
+                        那么没有人使用闭包了,那么闭包就会被回收释放
+
+                        总结:将引用内部函数的变量或者属性都进行重新赋值,赋值一个不相关的数据即可
+
+
+                注意:
+                    1.如果一个闭包被多个内部函数共享使用,那么一定要将所有的内部函数都是释放,才能释放这个闭包
+
+            6.闭包是什么?
+                闭包是一个对象
+                闭包中会通过属性名和属性值的结构,保存需要缓存的变量名和变量值
+
+                官方解释:闭包是根据外部函数的作用域以及内部函数的词法环境生成的一个对象
+                    简单来说:闭包是根据外部函数的变量对象以及内部函数的代码,生成的一个全新的对象
+
+
+                扩展:变量对象其实就是作用域的实现
+                    作用域其实是一个定义
+                    变量对象是根据这个定义实现的东西
+
+
+            7.闭包的使用场景
+                函数节流,函数防抖
+                例如后台管理系统中,删除品牌功能
+            
+        */
+
+        /*
+            执行上下文
+                执行上下文中,主要就是具有当前函数的this指向,return结果,
+                    还有当前函数中所有的变量组成的变量对象
+
+                    也就是说,函数中的变量都会成为当前变量对象的属性名,而变量值会成为属性值
+
+                创建时机:
+                    当函数被调用的时候,浏览器会创建一个执行上下文,并将其放入执行栈中(俗称入栈)
+                    栈结构->先进后出,后进先出
+
+                销毁时机:
+                    当函数内部代码执行结束之后,浏览器会将该函数的执行上下文自动从执行栈中弹出(俗称出栈)
+        
+        */
+
+        // var a = 1;
+        // function fn(){
+        //     console.log('fn',a);
+        // }
+        // fn();
+
+        //------------------
+        
+        // function wrap(){
+        //     function inner(){
+        //         console.log('inner');
+        //     }
+        //     inner();
+        // }
+        // wrap();
+
+        //-------------------------
+        
+        // function wrap(){
+        //     var a = 1;
+        //     function inner(){
+        //         console.log('inner',a);
+        //     }
+        //     inner();
+        //     // return inner;
+        // }
+        // var inner = wrap();
+        // inner();
+
+        //---------------------------
+        // function fn(){
+        //     var a = 1;
+        //     a++;
+        //     console.log(a)
+        // }
+        // fn();
+        // fn();
+
+
+        // function wrap(){
+        //     function inner(){
+        //         console.log(a)
+        //     }
+
+        //     var a = 1;
+        //     inner();
+        // }
+        // wrap();
+
+        //----------------------------
+        // function wrap(){
+        //     var a = 1;
+        //     function inner(){
+        //         console.log('inner',a);
+        //     }
+        //     return inner;
+        // }
+        // var inner = wrap();
+        // inner();
+
+        // var inner2 = inner;
+        // inner = null;
+        // inner2 = null;
+
+        //------------------------
+
+        // var data = 1;
+        // var data = 2;
+        // console.log(data)
+
+        // ;(function(){
+        //     var data = 1;
+
+        //     function getData(){
+        //         return data;
+        //     }
+
+        //     function addData(){
+        //         data++;
+        //     }
+
+        //     window.fns={
+        //         getData,
+        //         addData
+        //     }
+        // })();
+        // // var data = 2;
+
+        // var data = 6;
+
+        // fns.addData();
+        // var a = fns.getData();
+        // a-=1;
+        // console.log(a);
+
+        
+        // var a1 = fns.getData();
+        // console.log(a1);
+
+        //------------------------------
+        
+        function wrap(){
+            var a = 1;
+
+            function inner1(){
+                a++;
+                console.log('inner1',a);
+            }
+
+            function inner2(){
+                a+=2;
+                console.log('inner2',a);
+            }
+            return {
+                inner1,
+                inner2
+            };
+        }
+        var {inner1,inner2} = wrap();
+
+        inner1();//2
+        inner1();//3
+        inner1();//4
+        inner1();//5
+
+        inner2();//3    7
+        inner2();//5    9
+        inner2();//7    11
+        inner2();//9    13
+
+        inner1 = null;
+        inner2 = null;
+
+        var {inner1,inner2} = wrap();
+        inner1();//2    14
+        inner2();//4    16
+    </script>
+</body>
+</html>
