@@ -60,11 +60,19 @@
 
             3.块级作用域
                 该作用域是ES6新增的作用域,必须使用let或者const才会出现
+                块级作用域与自身外层的大括号有关,如果在不同的大括号中使用let,就会得到多个块级作用域
 
                 扩展:在全局使用let声明变量,那么这个变量会存储于块级作用域中
                     而这个块级作用域是仅次于全局作用域的一个作用域
-
+                    
             注意点:作用域限制的是变量的使用范围,不是变量值的使用范围
+
+        6.形参默认值
+            只要在函数中,使用了ES6新特性,形参默认值,那么函数内部的就会出现一个全新的块级作用域
+                而函数体代码就会在这个块级作用域中执行
+
+            注意点:如果具有形参默认值的形参,与函数体中的变量名称相同,那么这个默认值两人都有份
+                这是两个不同的变量,修改其中一个变量不会影响到另一个变量
     */
 
       // var a = 1;
@@ -156,26 +164,129 @@
       // console.log(a,b);
 
       //---------------------------------
-      var x = 1;
-      let obj = {
-          x:2,
-          fn:function(){
-              console.log(1,x);
-          }
-      }
-      obj.fn();
-      console.log(2,x)
+      //   var x = 1;
+      //   let obj = {
+      //       x:2,
+      //       fn:function(){
+      //           console.log(1,x);
+      //       }
+      //   }
+      //   obj.fn();
+      //   console.log(2,x)
 
-    //   if (true) {
-    //     let a = 1;
-    //     console.log(a);
+      //   if (true) {
+      //     let a = 1;
+      //     console.log(a);
+      //   }
+      //   console.log(a);
+
+      //----------------------------------
+      // let a = 1;
+      // window.a = 2;
+      // console.log(a)
+
+      //--------------------------------
+      // if(true){
+      //     let a = 1;
+      // }
+      // if(true){
+      //     let a2 = 1;
+      //     console.log(a,a2)
+      // }
+
+      //-----------------------
+      // 形参其实就是函数作用域中的一个变量而已,只不过这个变量不需要我们声明
+      // var b = 6;
+      // function wrap(x,y=5){
+      //     var a = 1;
+      //     var b;
+      //     var y;
+      //     y = 7
+      //     console.log(a,b,x,y);
+      // }
+      // wrap(3)
+
+      //------------------------------------------
+      //   var x = 1;
+
+      //   function fn(
+      //     x,
+      //     y = function () {
+      //       x = 3;
+      //       console.log('two',x);
+      //     }
+      //   ) {
+      //     console.log('one',x);
+      //     var x = 2;
+      //     y();
+      //     console.log('three',x);
+      //   }
+
+      //   fn();
+
+      //   console.log('four',x);
+
+      //---------------------------------------
+
+      //   var x = 1;
+
+      //   function fn(
+      //     x,
+      //     y = function () {
+      //       x = 3;
+      //       console.log('two',x);
+      //     }
+      //   ) {
+      //     console.log('one',x);
+      //     // var x = 2;
+      //     y();
+      //     console.log('three',x);
+      //   }
+
+      //   fn();
+
+      //   console.log('four',x);
+
+      //---------------------------------------
+
+    //   var x = 1;
+
+    //   function fn(
+    //     xx,
+    //     y = function () {
+    //       x = 3;
+    //       console.log("two", x);
+    //     }
+    //   ) {
+    //     console.log("one", x);
+    //     var x = 2;
+    //     y();
+    //     console.log("three", x);
     //   }
-    //   console.log(a);
 
-    //----------------------------------
-    // let a = 1;
-    // window.a = 2;
-    // console.log(a)
+    //   fn();
+
+    //   console.log("four", x);
+      //---------------------------------------
+
+      var x = 1;
+
+      function fn(
+        x = 4,
+        y = function () {
+          x = 3;
+          console.log("two", x);
+        }
+      ) {
+        console.log("one", x);
+        var x = 2;
+        y();
+        console.log("three", x);
+      }
+
+      fn();
+
+      console.log("four", x);
     </script>
   </body>
 </html>
