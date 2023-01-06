@@ -1,51 +1,69 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
-</head>
-<body>
+  </head>
+  <body>
     <script>
-        var length = 6;
-        var obj = {
-            length:7,
-            fn:function(){
-                return this.length;
-            }
-        };
+      // var length = 6;
+      // var obj = {
+      //     length:7,
+      //     fn:function(){
+      //         return this.length;
+      //     }
+      // };
 
-        (function(){
-            var length = 8;
-            // arguments是一个伪数组,它内部存放着当前函数得到的所有的实参
-            console.log(arguments[0]())
-        })(obj.fn);
+      // (function(){
+      //     var length = 8;
+      //     // arguments是一个伪数组,它内部存放着当前函数得到的所有的实参
+      //     console.log(arguments[0]())
+      // })(obj.fn);
 
-        //------------------------------
-        
-        // var length = 6;
-        // var obj = {
-        //     length:7,
-        //     fn:function(){
-        //         return this.length;
-        //     }
-        // };
+      //------------------------------
 
-        // (function(){
-        //     var length = 8;
-        //     // arguments是一个伪数组,它内部存放着当前函数得到的所有的实参
-        //     // arguments的length属性值,与传入了多少个实参有关
-        //      问题:什么是伪数组?
-        //          1.使用下标存储数据
-        //          2.具有length属性
-        //          3.不能使用数组的方法
-        //          伪数组是一个对象
-        //          读取对象属性值的写法:   obj.length obj["length"]
-        //     console.log(a.b())
-        //     console.log(arguments.0())
-        //     console.log(arguments[0]())
-        // })(0X001);
+      // var length = 6;
+      // var obj = {
+      //     length:7,
+      //     fn:function(){
+      //         return this.length;
+      //     }
+      // };
+
+      // (function(){
+      //     var length = 8;
+      //     // arguments是一个伪数组,它内部存放着当前函数得到的所有的实参
+      //     // arguments的length属性值,与传入了多少个实参有关
+      //      问题:什么是伪数组?
+      //          1.使用下标存储数据
+      //          2.具有length属性
+      //          3.不能使用数组的方法
+      //          伪数组是一个对象
+      //          读取对象属性值的写法:   obj.length obj["length"]
+      //     console.log(a.b())
+      //     console.log(arguments.0())
+      //     console.log(arguments[0]())
+      // })(0X001);
+
+      // function fn(){
+      //     console.log(this);
+      // }
+      // var arr = [fn];
+      // arr[0]();
+      // arr.0();
+
+      var obj = {
+        fn: function () {
+          console.log(this);
+        }
+      };
+    var a;
+    //   (obj.fn)();
+    // 赋值语句也是有返回值,他的返回值就是赋值的结果
+    //   (a = obj.fn)();
+    //   (0X001)();
     </script>
-</body>
+  </body>
 </html>

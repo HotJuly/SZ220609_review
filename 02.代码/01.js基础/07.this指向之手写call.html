@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      /*
+            前言:
+                fn.call(obj)
+                    fn->被借调函数
+                    call->借调函数
+                    obj->强行指定的this
+
+            面试题:请问call和apply的区别?
+            答案:
+                1.相同点
+                    1.他们都可以通过第一个实参,强行改变被借调函数的this指向
+
+                    2.他们都会同步调用被借调函数
+
+                    3.如果没有传入第一个实参(可以是undefined或者null),
+                        那么他们都会将被借调函数的this强行指定为window
+
+                    4.他们都会将被借调函数的返回值,作为自己的返回值进行return
+
+                2.不同点
+                    1.传入的参数个数不同
+                        call方法->  个数0-无限大
+                        apply方法-> 个数0-2个
+        
+        */
+
+      function fn(x, y, z) {
+        console.log("fn", this, x, y, z);
+        return x + y + z;
+      }
+
+      var obj = {
+        name: "xiaoming",
+        fn: fn,
+      };
+      // fn(1,2,3);
+      // console.log(1)
+    //   var result = fn.call(9,2,3,4)
+      // var result2 = fn.apply(obj,[6,7,8])
+      // console.log(result,result2)
+      // console.log(2)
+
+      // obj.fn();
+      // obj.fn.call()
+      // obj.fn.apply()
+
+      //--------------------------------------
+      // 手写call方法
+      Function.prototype.myCall = function (thatThis, ...args) {
+        /*
+                this    ->  被借调函数(fn)
+                thatThis->  强行指定的this指向(obj)
+            */
+        //    undefined和null互相比较都是true,与其他任何人都是false
+        //    if(thatThis ===undefined ||thatThis === null){
+
+        if (thatThis == undefined) {
+          thatThis = window;
+        }
+
+        // if(typeof thatThis === 'number'){
+        //     // thatThis = new Number(thatThis);
+        //     thatThis = new Object(thatThis);
+        // }
+
+        thatThis._fn = this;
+        //    扩展：thatThis.__proto__._fn = this;
+
+        var result = thatThis._fn(...args);
+
+        delete thatThis._fn;
+
+        return result;
+      };
+      var result = fn.myCall(9, 2, 3, 4);
+      console.log(result);
+    </script>
+  </body>
+</html>
