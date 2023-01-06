@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      /*
+            this指向
+                this是一个关键字,也就是专门为浏览器预留的一个变量(形参)
+                    形参->形参是我们声明的,他的值是我们调用函数的时候传入的实参
+                    this->this是浏览器声明的,this的值是浏览器在函数被调用的时候传入的
+
+                this里面存的是当前函数的调用者
+                this的值与函数的声明位置无关,调用方式有关
+
+            常见的this指向:
+                1.普通调用->this是window
+                    例如:fn();
+
+                2.隐式调用->this是前面的实例对象
+                    例如:obj.fn();
+                    注意:无论写的层数有多深,只要关注函数在哪个对象身上就可以
+
+                3.构造调用->this是当前函数的实例对象
+                    例如:new fn();
+
+                4.显式调用->this是强行指定的对象
+                    例如:fn.call(obj)
+
+            特殊的this指向:
+                1.事件回调函数
+                    this是当前事件的事件源对象
+                    事件源指的是绑定了事件的DOM对象
+
+                2.定时器
+                    this是window
+                
+                3.Vue
+                    在methods,computed,watch,生命周期等中,this是当前组件实例对象
+
+                4.React
+                    函数组件
+                        this是undefined
+
+                    class组件
+                        如果是fn(){}这种写法,this就是undefined
+                        如果是fn=()=>{}这种写法,this就是当前组件实例对象
+                
+                5.小程序
+                    在事件回调函数,生命周期中,this是当前页面实例对象
+
+                6.箭头函数(ES6新增)
+                    他没有属于自己的this
+                    this是外层作用域的this
+
+            面试题1:请问箭头函数能否被call,apply,bind强行改变this指向?
+            答案:不能
+
+            面试题2:请问箭头函数能否被构造调用?
+            答案:不能
+
+            面试题3:请问箭头函数是否具有原型对象?
+            答案:没有
+
+
+        */
+      // function wrap(){
+      //     function inner(){
+      //         console.log(this);
+      //     }
+      //     // inner();
+      //     return inner
+      // }
+      // var inner = wrap();
+      // inner();
+
+      //----------------------------
+      function fn() {
+        console.log(this);
+      }
+    //   fn();
+
+      var obj = {
+        fn:fn
+      }
+    //   obj.fn();
+
+    //   a.b.c.d.e.f.g.h()
+
+    // new fn();
+
+    // fn.call(obj);
+
+    var fn1 = ()=>{
+        console.log(this)
+    }
+    // fn1.call(obj)
+
+    // new fn1()
+    // console.dir(fn)
+    // console.dir(fn1)
+    </script>
+  </body>
+</html>
