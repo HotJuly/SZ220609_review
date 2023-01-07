@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
-</head>
-<body>
-  <ul>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <!-- <ul>
       <li>aaa</li>
       <li>bbb</li>
       <li>ccc</li>
@@ -14,36 +14,87 @@
   <button id="test">test</button>
   <div id="content">
       aaaaaaa
-  </div>
-  <script>
-      Promise.resolve().then(() => { // ?任务
-          alert('promise1') // 页面渲染了吗?
-      }) 
+  </div> -->
+    <div id="content">0</div>
+    <script>
+      /*
+        问题:区分挂载和渲染
+        回答:不是同一个东西
+            挂载->将DOM节点插入到html元素中
+            渲染->浏览器根据html元素的内容,绘制到页面上给用户观看
+            挂载是同步的,渲染是异步的
 
-      Promise.resolve().then(() => { // ?任务
-          alert('promise2') // 页面渲染了吗?
-      }) 
 
-      setTimeout(() => {// ?任务
-          alert(document.getElementById('content').innerHTML)  // 页面渲染了吗?
-      }, 0)
+        执行解析js代码的是js引擎(又称为js线程)
+        负责页面渲染的是GUI线程
+        GUI线程和JS线程,两者是互斥的
 
-      document.getElementById('test').onclick = () => {// ?任务
+        首次渲染页面流程:
+            首先执行主线程代码->清空微任务队列->GUI线程渲染页面->执行下一个宏任务
 
-          document.getElementById('content').innerHTML = 'xxxx'
+        更新页面流程:
+            清空微任务队列->GUI线程渲染页面->执行下一个宏任务
 
-          alert(document.getElementById('content').innerHTML)
 
-          setTimeout(() => {// ?任务  
-              alert(document.getElementById('content').innerHTML) // 页面更新渲染了吗?
-          }, 0); 
+        问题:明明已经有宏任务了,为什么ES6还要新增微任务?
+        回答:
+            前提:对页面的节点进行十万次的操作
+                如果每个宏任务中,都修改一次页面,那么页面一共渲染10万次页面
+                如果每个微任务中,都修改一次页面,那么页面一共渲染1次页面
 
-          Promise.resolve().then(() => { // ?任务 
-              alert('promise3') //页面更新渲染了吗?
-          }) 
+                可以在微任务中多次修改页面,浏览器最终会根据最后一次的结果渲染页面
+                    其实就是实现了函数防抖效果
+
+                扩展:Vue就是在微任务中更新DOM的
+    
+    */
+      //   Promise.resolve().then(() => { // 微任务
+      //       alert('promise1') // 页面渲染了吗?
+      //   })
+
+      //   Promise.resolve().then(() => { // 微任务
+      //       alert('promise2') // 页面渲染了吗?
+      //   })
+
+      //   setTimeout(() => {// 宏任务
+      //       alert(document.getElementById('content').innerHTML)  // 页面渲染了吗?
+      //   }, 0)
+
+      //   document.getElementById('test').onclick = () => {// 宏任务
+
+      //     //挂载是同步的,渲染是异步的
+      //       document.getElementById('content').innerHTML = 'xxxx'
+      //       document.getElementById('content').innerHTML = 'xxxx1'
+      //       document.getElementById('content').innerHTML = 'xxxx2'
+      //       document.getElementById('content').innerHTML = 'xxxx3'
+      //       document.getElementById('content').innerHTML = 'xxxx4'
+      //       document.getElementById('content').innerHTML = 'xxxx5'
+      //       document.getElementById('content').innerHTML = 'xxxx6'
+      //       document.getElementById('content').innerHTML = 'xxxx7'
+      //       document.getElementById('content').innerHTML = 'xxxx'
+
+      //       alert(document.getElementById('content').innerHTML)
+
+      //       setTimeout(() => {// 宏任务
+      //           alert(document.getElementById('content').innerHTML) // 页面更新渲染了吗?
+      //       }, 0);
+
+      //       Promise.resolve().then(() => { // 微任务
+      //           alert('promise3') //页面更新渲染了吗?
+      //       })
+      //   }
+
+      //   alert('1111') // 页面渲染了吗?
+
+      //----------------------------------
+      for (let index = 0; index < 100000; index++) {
+        // setTimeout(()=>{
+        //     document.querySelector('#content').innerText = index;
+        // },10*index);
+        Promise.resolve().then(()=>{
+            document.querySelector('#content').innerText = index;
+        })
       }
-      
-      alert('1111') // 页面渲染了吗?
-  </script>
-</body>
+    </script>
+  </body>
 </html>
