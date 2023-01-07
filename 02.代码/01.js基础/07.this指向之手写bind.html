@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      /*
+            面试题:请问call方法和bind方法的区别?
+            回答:
+                1.相同点
+                    1.他们都可以传入一个实参,都可以将被借调函数的this强行指定为该实参
+
+                    2.传参个数相同
+                        他们可以接收的参数个数都是0到无限大
+                        第二个实参开始的数据,都会传给被借调函数,作为被借调函数的实参
+
+                    3.如果没有传入第一个实参,或者是undefined/null,那么当前被借调函数的this会被强行修改成window
+                        如果传入的是number/string/boolean类型,那么被借调函数的this就是对应的包装类对象
+
+                2.不同点
+                    1.被借调函数的执行时机不一样
+                        call方法会同步调用被借调函数
+                        bind方法不会同步调用被借调函数
+
+                    2.返回值不同
+                        call方法会将被借调函数的执行结果作为自己的返回值进行return
+                        bind方法会返回一个被修改了this的全新函数
+
+                    3.修改this的时效性不一样
+                        call方法只是临时修改本轮调用的this指向,对以后调用没有任何影响
+                        bind方法会永久修改新函数的this指向
+
+                            注意点:bind函数返回的全新函数,他的this永久无法修改
+
+                    4.传参次数不同
+                        call方法只有一次传入参数的机会
+                            call方法调用的时候不传入参数,后续就没有机会了
+
+                        bind方法有两次传入参数的机会
+                            bind方法由于他返回的是一个函数,所有他可以在调用返回函数的时候再次传入参数进行补充
+        
+        */
+
+       /*
+        函数柯里化
+            将一个本来接受多个参数的函数,切割成多个函数嵌套,每个函数只接受一个参数
+            好处:可以减少后续参数的传入个数,提高代码性能
+       
+       */
+      function fn(x,y,z) {
+        console.log(this,x,y,z);
+        return x+y+z;
+      }
+
+      var obj = {
+        name: "xiaoming",
+      };
+
+      //fn();
+    //   var result = fn.call(obj,1,2,3);
+    //   fn();
+    //   fn();
+      var fn2 = fn.bind(obj,3);
+    //   fn2(8,6);
+
+    //   var fn3 = fn2.call(window,7,8,9);
+    //   console.log(fn2 === fn)
+
+
+    Function.prototype.myBind = function(thatThis,...args){
+        /*
+            this    ->  被借调函数(fn)
+            thatThis->  强行指定的this指向(obj)
+        */
+       var that = this;
+
+        return function(...args2){
+            that.call(thatThis,...args,...args2);
+        }
+    }
+    
+    var fn2 = fn.myBind(obj,9);
+    // fn2(9,9);
+    // fn2.call(window);
+    // fn2();
+    // fn2();
+    // fn2();
+    // fn2();
+    // fn2();
+    // fn2();
+    // fn2();
+    // fn2();
+
+    //---------------------------------------
+    // function person(name,age,sex){
+    //     return {
+    //         name,
+    //         age,
+    //         sex
+    //     }
+    // }
+
+    // var p1 = person("xiaoming",23,'男')
+    // var p2 = person("xiaohong",26,'女')
+    // console.log(p1,p2)
+
+    //-----------------------------------------
+    // function person(sex){
+    //     return function(name,age){
+    //         return {
+    //             name,
+    //             age,
+    //             sex
+    //         }
+    //     }
+    // }
+    
+    // var woman = person('女');
+    // var p1 = woman('xiaohong',23);
+    // var p2 = woman('xiaolv',38);
+
+    //----------------------------------------
+    // function person(sex){
+    //     return function(age){
+    //         return function(name){
+    //             return {
+    //                 name,
+    //                 age,
+    //                 sex
+    //             }
+    //         }
+    //     }
+    // }
+    // var woman = person('女');
+    // var young = woman(18);
+    // var p1 = woman('xiaohong');
+    // var p2 = woman('xiaolv');
+
+    //----------------------------------------
+    
+    function person(sex,age,name){
+        return {
+            name,
+            age,
+            sex
+        }
+    }
+
+    var young = person.bind(null,'女',18);
+    var p1 = young('xiaohong');
+    var p2 = young('xiaolv');
+    console.log(p1,p2)
+    </script>
+  </body>
+</html>

@@ -21,6 +21,9 @@
                 1.普通调用->this是window
                     例如:fn();
 
+                    扩展点:其实这种写法他的this应该是undefined,
+                      但是在非严格模式下,js引擎会将所有undefined的this都修改window
+
                 2.隐式调用->this是前面的实例对象
                     例如:obj.fn();
                     注意:无论写的层数有多深,只要关注函数在哪个对象身上就可以
