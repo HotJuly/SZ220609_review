@@ -88,12 +88,12 @@
 
       //----------------------------------
       for (let index = 0; index < 100000; index++) {
-        // setTimeout(()=>{
-        //     document.querySelector('#content').innerText = index;
-        // },10*index);
-        Promise.resolve().then(()=>{
+        setTimeout(()=>{
             document.querySelector('#content').innerText = index;
-        })
+        },index);
+        // Promise.resolve().then(()=>{
+        //     document.querySelector('#content').innerText = index;
+        // })
       }
     </script>
   </body>

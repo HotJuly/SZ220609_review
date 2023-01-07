@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        /*
+            问题:js中,6个false值是哪六个?
+            答案:false,0,NaN,"",undefined,null
+        
+        */
+
+
+        // 基本数据类型VS基本数据类型
+        //toNumber
+        // console.log("1",true==1);      //true
+        // console.log("2",true=="1");    //true
+        // console.log("3","2"==1);       //false
+        // console.log("4","a"==1);       //NaN === 1 false
+        // console.log("5",true=="true"); //1 === NaN =>false
+        // console.log("6",true=="false");//1 === NaN =>false
+
+
+        //对象数据类型VS对象数据类型
+        // 比较地址值
+        // console.log("7",[]==[]);  //false   new Array == new Array
+        // console.log("8",{}=={});  //false   new Object == new Object
+        // console.log("9",[]===[]); //false
+        // console.log("10",{}==={});//false
+        // console.log("11",[]!==[]);//true
+        // console.log("13",{}!=={});//true
+        
+        //对象数据类型VS基本数据类型
+        // !计算优先级高于==
+        // 先使用valueOf方法,再使用toString方法
+        // console.log("12",[]==![]);//true    =>  []==(![]) => []==false => ""==false => 0===0
+        // console.log("14",{}==!{});//false   =>  {}==(!{}) => {}==false => '[object Object]'==false => NaN === 0
+
+        console.log("15",0=="0")//true
+        console.log("16",0==[]) //true
+        console.log("17","0"==[])//true =>  "0"==""
+
+    </script>
+</body>
+</html>
