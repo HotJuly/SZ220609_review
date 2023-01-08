@@ -128,45 +128,50 @@
 
       //--------------------------------
 
-      //   var p1 = new Promise((resolve, reject) => {
-      //     setTimeout(() => {
-      //       resolve();
-      //     }, 1000);
-      //   });
+        var p1 = new Promise((resolve, reject) => {
+          setTimeout(() => {
+            resolve();
+          }, 1000);
+        });
 
-      //   p1
-      //   .then(
-      //     undefined,
-      //     () => {
-      //         console.log(2)
-      //     }
-      //   )
-      //   .then(
-      //     () => {
-      //         console.log(3)
-      //     },
-      //     () => {
-      //         console.log(4)
-      //     }
-      //   );
+        var p2 = p1
+        .then(
+          undefined,
+          () => {
+              console.log(2)
+          }
+        )
+
+        var p3 = p2.then(
+          () => {
+              console.log(3)
+          },
+          () => {
+              console.log(4)
+          }
+        );
+
+        console.log(p2,p3)
 
       //-----------------------------
 
-      var p1 = new Promise((resolve, reject) => {
-        setTimeout(() => {
-          reject();
-        }, 1000);
-      });
+      // var p1 = new Promise((resolve, reject) => {
+      //   setTimeout(() => {
+      //     reject();
+      //   }, 1000);
+      // });
 
-      p1.then(() => {
-        console.log(1);
-      })
-        .catch(() => {
-          console.log(5);
-        })
-        .then(() => {
-          console.log(3);
-        });
+      // p1.then(() => {
+      //   console.log(1);
+      // })
+      //   .catch(() => {
+      //     console.log(5);
+      //   })
+      //   .then(() => {
+      //     console.log(3);
+      //   });
+
+        //-------------------------------------------
     </script>
   </body>
 </html>
