@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      /*
+            Promise
+                数据类型:函数
+                接收参数个数:1个
+                    数据类型:函数(称为执行器函数)
+                    接收参数个数:2个
+                        数据类型:函数
+                        resolve方法
+                            该方法被调用之后,会将p1的状态变为成功状态
+
+                        reject
+                            该方法被调用之后,会将p1的状态变为失败状态
+                            如果变为失败状态,在控制台中,出现红色报错
+
+                        以上两个函数,在调用的时候,可以对其传入实参,该数据会变成p1的结果值
+
+                返回值
+                    promise对象(简称p1)
+                        具有两个重要属性
+                            state->当前p1的状态
+                                pending->等待(初始状态)
+                                resolved/fulfilled->成功
+                                rejected->失败
+
+                            注意:promise对象的状态是不可逆的,也无法二次修改
+
+                            result->当前p1的结果值
+                    
+
+            .then
+                用处:他可以监视p1状态的变化,并根据发生的变化执行对应的回调函数
+                数据类型:函数
+                接收参数个数:2个
+                    数据类型:函数
+                    第一个函数是成功回调函数
+                        当p1变成成功状态的时候,就会调用该函数
+
+                    第二个函数是失败回调函数
+                        当p1变成失败状态的时候,就会调用该函数
+                        该函数可以捕获到失败状态,并且方法控制台出现红色报错
+
+                    注意点:
+                        1.通过在回调函数中声明形参,可以获取到p1对象的结果值
+                返回值
+                    一个全新的promise对象(简称p2)
+
+                    问题:如何控制p2的状态?
+                        变为成功
+                            1.如果回调函数返回的是一个基本数据类型,那么p2的状态就会变为成功
+                                只要回调函数中的代码,全部成功执行结束,那么p2的状态就会变为成功状态
+
+                            2.如果回调函数中返回一个成功的Promise对象,那么p2的状态也会变为成功
+
+                        变为失败
+                            1.如果回调函数中的代码,出现报错执行失败,那么p2的状态就会变为失败状态
+
+                            2.如果回调函数中返回一个失败的Promise对象,那么p2的状态也会变为失败
+                    注意点:
+                        1.无论回调函数中,返回什么数据,都不会影响到.then函数的返回值
+                        2.回调函数的返回值,会成为p2对象的结果值
+                        3.如果p1状态发生了变化,但是.then没有对应的回调函数,那么p2的状态就会继承p1的状态
+
+            .catch
+                用处:用于监视promise对象的状态变化,如果变为失败状态,就执行接收到的回调函数
+                数据类型:函数
+                接收参数个数:1个
+                    当promise对象的状态变为失败,就会执行
+                    .catch其实是.then的语法糖
+                        .catch  =>    .then(undefined,()=>{})
+                返回值
+                    是一个全新的promise对象
+                
+
+
+        
+        */
+      //    var p1 = new Promise((resolve,reject)=>{
+      //     // console.log(1)
+
+      //         setTimeout(()=>{
+      //             resolve();
+      //         },1000)
+
+      //         setTimeout(()=>{
+      //             reject();
+      //         },2000)
+
+      //     // resolve(123);
+      //     // reject(345);
+      //    });
+      //     console.log(p1)
+
+      //----------------------------------------------
+
+      //   var p1 = new Promise((resolve, reject) => {
+      //     setTimeout(() => {
+      //       resolve(123);
+      //     //   reject(666);
+      //     }, 1000);
+      //   });
+
+      //   var p3 = Promise.resolve();
+      //   var p2 = p1.then(
+      //     (data) => {
+      //         console.log(1,data)
+
+      //         // throw new Error(999);
+      //         return 333;
+      //         // return Promise.resolve();
+      //         // return Promise.reject();
+      //         // return p3;
+      //     },
+      //     (error) => {
+      //         console.log(2,error)
+      //     }
+      //   );
+      //   console.log(p2)
+
+      //--------------------------------
+
+      //   var p1 = new Promise((resolve, reject) => {
+      //     setTimeout(() => {
+      //       resolve();
+      //     }, 1000);
+      //   });
+
+      //   p1
+      //   .then(
+      //     undefined,
+      //     () => {
+      //         console.log(2)
+      //     }
+      //   )
+      //   .then(
+      //     () => {
+      //         console.log(3)
+      //     },
+      //     () => {
+      //         console.log(4)
+      //     }
+      //   );
+
+      //-----------------------------
+
+      var p1 = new Promise((resolve, reject) => {
+        setTimeout(() => {
+          reject();
+        }, 1000);
+      });
+
+      p1.then(() => {
+        console.log(1);
+      })
+        .catch(() => {
+          console.log(5);
+        })
+        .then(() => {
+          console.log(3);
+        });
+    </script>
+  </body>
+</html>
