@@ -18,7 +18,7 @@
                         resolve方法
                             该方法被调用之后,会将p1的状态变为成功状态
 
-                        reject
+                        reject方法
                             该方法被调用之后,会将p1的状态变为失败状态
                             如果变为失败状态,在控制台中,出现红色报错
 
@@ -39,6 +39,10 @@
 
             .then
                 用处:他可以监视p1状态的变化,并根据发生的变化执行对应的回调函数
+                  也就是说,如果监视的对象发生变化,会将回调函数放入微任务队列
+
+                扩展点:.then其实只要他前面的promise对象不是pending,就会执行对应的回调函数
+
                 数据类型:函数
                 接收参数个数:2个
                     数据类型:函数
@@ -128,30 +132,30 @@
 
       //--------------------------------
 
-        var p1 = new Promise((resolve, reject) => {
-          setTimeout(() => {
-            resolve();
-          }, 1000);
-        });
+      // var p1 = new Promise((resolve, reject) => {
+      //   setTimeout(() => {
+      //     resolve();
+      //   }, 1000);
+      // });
 
-        var p2 = p1
-        .then(
-          undefined,
-          () => {
-              console.log(2)
-          }
-        )
+      // var p2 = p1
+      // .then(
+      //   undefined,
+      //   () => {
+      //       console.log(2)
+      //   }
+      // )
 
-        var p3 = p2.then(
-          () => {
-              console.log(3)
-          },
-          () => {
-              console.log(4)
-          }
-        );
+      // var p3 = p2.then(
+      //   () => {
+      //       console.log(3)
+      //   },
+      //   () => {
+      //       console.log(4)
+      //   }
+      // );
 
-        console.log(p2,p3)
+      // console.log(p2,p3)
 
       //-----------------------------
 
@@ -171,7 +175,27 @@
       //     console.log(3);
       //   });
 
-        //-------------------------------------------
+      //-------------------------------------------
+      var p1 = new Promise((resolve, reject) => {
+        setTimeout(() => {
+          resolve();
+        }, 1000);
+      });
+
+      setTimeout(() => {
+        p1.then(
+          () => {
+            console.log(1);
+          },
+          () => {
+            console.log(2);
+          }
+        );
+      }, 2000);
+
+      // Promise.resolve().then(()=>{
+
+      // })
     </script>
   </body>
 </html>

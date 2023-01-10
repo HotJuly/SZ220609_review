@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      /*
+        async和await
+            1.他们是什么?
+                他们是ES6+新增的语法糖(其实ES8)
+
+                他们其实是Promise和.then的语法糖
+
+                async和await都是关键字
+
+            2.为什么要使用?
+                他们是解决回调地狱的终极方案
+                他们可以实现以同步的流程,书写异步的代码
+
+            3.怎么使用?
+                async
+                    async可以单独使用
+                    需要书写在函数声明之前
+
+                await
+                    await不可以单独使用
+                        扩展点:在ES12语法中,已经允许await单独使用了,但是只能在顶级作用域中使用
+
+                    await右侧一般书写promise对象,
+                        await表达式的返回值,是右侧promise对象的结果值
+                        如果await右侧书写的不是promise对象,那么await表达式的结果值就是右侧的数据
+
+                    await可以拦截后续代码执行,但是范围仅限于当前的async函数之内
+                        await右侧的代码会立即执行
+                        注意:无论await右侧的promimse是否是立即成功的,后续代码都会异步执行
+                            因为await之后的代码,都相当于是放在.then的成功回调函数中
+
+                    
+                async函数的返回值
+                    是一个promise对象(简称p1)
+                        问题:如何控制它的状态?
+                        变为成功
+                            1.只要async函数中的代码,全部成功执行结束,那么p1的状态就是成功
+                            2.只要async函数返回一个成功的Promise对象,那么p1的状态就是成功
+
+                        变为失败
+                            1.只要async函数中的代码,执行出现错误,那么p1的状态就是失败
+                            2.只要async函数返回一个失败的Promise对象,那么p1的状态就是失败
+                            3.如果await右侧跟的是一个失败的Promise对象,那么p1的状态就是失败
+                            
+                    注意点:
+                        1.无论async函数返回什么数据,最终一定都会返回一个promise对象
+
+                    
+
+    
+    
+    */
+
+      async function fn() {
+        console.log(1);
+
+        var result = await new Promise((resolve,reject)=>{
+            console.log(2)
+            reject(123)
+        })
+        console.log(3);
+
+        // throw new Error();
+
+
+        // return Promise.resolve();
+        // return Promise.reject();
+
+      }
+
+      console.log(4);
+      var a = fn();
+      console.log(5,a);
+
+      //---------------------------------------
+    //   function fn() {
+    //     console.log(1);
+
+    //     return new Promise((resolve,reject)=>{
+    //         console.log(2)
+    //         // setTimeout(()=>{
+    //             reject()
+    //         // },2000);
+    //     })
+    //     .then(()=>{
+    //         console.log(3);
+
+    //         // throw new Error();
+
+    //         // return Promise.resolve();
+    //     })
+    //   }
+
+    //   console.log(4);
+    //   var a = fn();
+    //   console.log(5,a);
+
+    //---------------------------
+    // async function fn() {
+    //     console.log(1);
+
+    //     var result = await 999;
+    //     console.log(3,result);
+    //   }
+
+    //   console.log(4);
+    //   fn();
+    //   console.log(5);
+    </script>
+  </body>
+</html>
