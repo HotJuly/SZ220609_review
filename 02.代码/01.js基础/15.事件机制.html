@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <!-- <h1 onclick="fn">h1标签</h1> -->
+    <h1 id="h1">我是h1标签</h1>
+    <script>
+      /*
+        事件机制
+            1.事件,事件机制是什么?
+                事件->在编程时程序中发生的事情或者发生的操作
+                    简单点来说:就是用户做了哪些操作
+
+                事件组成的要素
+                    1.事件源
+                    2.事件名
+                    3.事件回调函数(又称为事件监听,事件处理器)
+                        只要事件触发了,事件处理器就会自动执行
+
+                    扩展:
+                        1.JS线程负责事件处理器的绑定,
+                        2.DOM管理模块(分线程)负责监视事件触发以及将事件处理器放入宏任务队列
+                            div.onclick=function(){}
+
+                事件机制就是同时触发了多个事件,他们的执行顺序等规则组成的一套规则
+
+                事件机制:
+                    1.事件捕获机制(网景公司)
+                    2.事件冒泡机制(微软公司IE)
+                    3.标准事件机制(又称为标准事件流,是W3C推出的,目前绝大多数的浏览器都是用该标准)
+
+                标准事件机制中阶段划分:
+                    1.捕获阶段
+                        从最外层的document开始,向内逐层触发同类型事件,直到最内层的目标元素位置
+                            只要事件触发了,那么DOM管理模块就会将对应的事件处理器放入宏任务队列
+
+                    2.目标阶段
+                        将目标元素身上,所有的同类型事件都触发
+
+                    3.冒泡阶段
+                        从最内层的目标元素开始,向外逐层触发同类型事件,直到最外层的document为止
+
+            2.为什么要使用他们?
+                我们需要与用户和浏览器进行交互
+                需要知道用户/浏览器的当前状态
+                    想要实现以上这些功能,就必须使用事件机制才能解决
+
+            3.怎么使用事件?
+                绑定事件的语法:
+                    1.内嵌写法
+                        直接将事件在标签身上直接写上
+                        这种写法已经被淘汰了
+
+                    2.DOM 0写法
+                        div.onclick=function(){}
+                        本质:在给div对象添加一个onclick属性,属性值是函数
+                        优点:书写方便
+                            绑定语法简单,解绑语法也简单
+                        缺点:由于onclick是一个属性,所以如果多次赋值会出现覆盖操作
+                            只会留下最后一个事件处理器
+
+                    3.DOM 2写法
+                        div.addEventListener('click',function(){})
+                        本质:在调用div对象身上的addEventListener方法,并传入实参
+                        优点:
+                            由于本质是函数调用,所以可以调用多次,传入多个事件处理器
+                        缺点:
+                            书写麻烦
+                            绑定语法麻烦,解绑语法更麻烦
+                            div.removeEventListener('click',function(){})
+                                注意:想要成功解绑事件,事件处理器必须传入绑定时候的那一个
+                        第三个参数:
+                            数据类型:布尔值||对象
+                            布尔值
+                                true->将事件绑定在捕获阶段
+                                false->将事件绑定在冒泡阶段(这是默认值)
+                            对象
+                                capture
+                                    true->将事件绑定在捕获阶段
+                                    false->将事件绑定在冒泡阶段(这是默认值)
+                                passive(这个属性与禁用默认行为有关)
+                                    true->代表事件处理器中的event.preventDefault调用生效
+                                    false->代表事件处理器中的event.preventDefault调用无效
+
+                    注意:默认情况下,事件都是绑定在冒泡阶段
+
+                问题:如何阻止冒泡?
+                    1.event.cancelBubble=true;(IE专用)
+                    2.event.stopPropagation();
+
+                问题:如何阻止捕获?
+                    1.event.stopPropagation();
+    */
+    // function fn(){
+    //     console.log('h1 click')
+    // }
+
+    // h1.addEventListener('click',fn)
+
+    // h1.removeEventListener('click',fn)
+    </script>
+  </body>
+</html>
