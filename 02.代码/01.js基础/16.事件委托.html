@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="wrap">
+      <h1 class="h1">A</h1>
+      <h1 class="h1">B</h1>
+      <div class="inner">C</div>
+      <div class="inner">D</div>
+    </div>
+    <script>
+      /*
+        事件委托
+            1.事件委托是什么?
+                他其实本质是开发者合理运用事件机制得到的一个产物
+                    其实他就是一种代码的特殊写法
+
+                简单点说,其实就是将子节点的事件绑定在父节点身上,这种操作称之为事件委托
+
+                事件委托其实是一种性能优化的方案
+
+            2.为什么要使用事件委托?
+                在没有使用事件委托之前,存在的问题:
+                    1.需要给每个子节点都绑定事件,需要给每个事件都准备事件处理器
+                        需要绑定事件的节点越多,事件处理器占用的内存空间越大
+
+                    2.后续新增的子节点,错过了当初绑定事件处理器的时间点,导致无法使用对应的事件处理器
+
+
+                使用事件委托之后:
+                    1.只需要创建一个事件处理器,并且给父节点绑定该处理器即可
+                        那么当前该节点内部所有的子节点都能享受到这个事件处理器的效果
+                            可以减少内存的消耗
+
+                    2.一劳永逸
+                        后续新增的子节点,也可以享受到之前绑定的事件处理器效果
+
+
+                    原理:事件冒泡阶段效果(子节点会向父节点传递事件,触发同类型事件)
+
+            3.使用事件委托之后存在的问题?
+                如果该父节点中还存在其余的子节点
+                    而我们只想让部分子节点能触发该事件
+
+                目前的结果:内部无论是什么节点,都能触发该事件
+
+            4.如何解决该问题?
+                我们不会将真正的事件处理器直接绑定在父节点身上
+                    1.而是给父节点绑定一个全新的匿名函数,
+                    2.在这个匿名函数中,我们可以使用matches对当前的目标元素进行角色判断
+                    3.如果符合我们的需求,那么就使用call方法调用真正的事件处理器
+                        并同时修改该函数的this指向
+
+            5.开发中的使用场景
+                首页的三级分类功能
+                    记得要给面试官说一下写代码的经历
+
+    */
+      //    获取到多个h1标签组成的伪数组
+      //   var h1s = document.querySelectorAll(".h1");
+
+      //   for (let i = 0; i < h1s.length; i++) {
+      //     const h1 = h1s[i];
+      //     h1.onclick = function () {
+      //       console.log("h1 click");
+      //     };
+      //   }
+
+      //   setTimeout(()=>{
+      //     var h1 = document.createElement('h1');
+      //     h1.className="h1";
+      //     h1.innerText="新增"
+
+      //     var wrap = document.querySelector("#wrap");
+      //     wrap.appendChild(h1);
+      //   },1000)
+
+      //----------------------------------------
+      var wrap = document.querySelector("#wrap");
+
+      //   wrap.onclick = function () {
+      //     console.log("h1 click");
+      //   };
+
+      bindEvent2(
+        wrap,
+        "click",
+        function (event) {
+          console.log("h1 click",this);
+        },
+        ".h1"
+      );
+
+      setTimeout(() => {
+        var h1 = document.createElement("h1");
+        h1.className = "h1";
+        h1.innerText = "新增";
+
+        wrap.appendChild(h1);
+      }, 1000);
+
+      function bindEvent2(ele, type, fn, selector) {
+        ele.addEventListener(type, function (event) {
+            // 这是用于获取当前事件的目标元素
+          const target = event.target;
+          if (selector) {
+
+            // matches方法的效果是判断前面的DOM节点是否匹配后面的选择器
+            // 如果匹配就返回true,否则就是false
+            // 此处就是在做角色判断/区分,只有指定的元素才能执行内部的代码
+            if (target.matches(selector)) {
+
+            // 如果不使用call方法强行改变fn的this,那么this就是window
+            // 如果fn中使用到了this,那么大概率会出现错误
+              fn.call(target, event);
+            //   fn();
+            }
+          } else {
+            fn.call(ele, event);
+          }
+        });
+      }
+    </script>
+  </body>
+</html>
