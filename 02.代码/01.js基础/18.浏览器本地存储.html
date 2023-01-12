@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+    /*
+        本地存储区别
+            1.生命周期
+                cookie
+                    如果有max-age属性,只要该cookie没有超过最大存活时间,就能一直存活
+                    如果没有max-age属性,说明当前cookie是会话级cookie,只要关闭标签页,数据就会丢失
+
+                localStorage
+                    只要不主动删除数据,那么数据将会永久存在
+
+                sessionStorage
+                    如果将当前标签页或者浏览器关闭,那么存储在内部的数据就会丢失
+                        问题:刷新当前标签页,数据是否会丢失?
+                        回答:不会
+
+            2.存储位置
+                cookie
+                    如果有max-age属性,存储于硬盘中
+                    如果没有max-age属性,存储于内存中
+
+                localStorage
+                    存储于硬盘中
+
+                sessionStorage
+                    存储于内存中
+
+            3.存储大小
+                cookie->4KB
+                localStorage->5MB
+                sessionStorage->5MB
+
+            4.使用范围
+                cookie
+                    cookie的使用范围受到两个属性的影响
+                        domain属性
+                            例如:domain="http://www.baidu.com"
+                            也就是说,当前这个cookie只能在该域名的后代域名中使用
+
+                        path属性
+                            例如:path="/a"
+                            也就是说,当前这个cookie只能在/a衍生出来的后代路由中使用
+                                也就是说儿子可以使用父亲的,父亲不能使用儿子的
+                                
+                        总结:其实这两个属性,都是实现儿子读取父亲的操作
+
+                localStorage
+                    localStorage使用范围与域名有关
+                        如果域名不相同,那么他们的localStorage不互通
+
+                    总结:可以实现跨标签也通信,前提是两个标签页的域名相同
+                        而且他们使用的是同一份数据
+
+                sessionStorage
+                    sessionStorage使用范围与域名有关
+                    sessionStorage无法跨标签页通信
+                    注意:即便是复制标签页,他们两个的sessionStorage数据是相同的,
+                        但是不是同一份,是两份数据,互不影响
+
+            5.与服务器的关系
+                cookie(被借用的本地存储)
+                    服务器创建,浏览器存储
+                    服务器通过响应头的set-cookie属性,可以将服务器准备好的数据返回给浏览器
+                    浏览器通过请求头的cookie属性,可以将数据发送给服务器
+                    浏览器是自动存储,自动携带cookie的
+
+                localStorage
+                    与服务器无关
+
+                sessionStorage
+                    与服务器无关
+
+            6.面试题:如何实现跨标签页通信?
+                前言:想要发送数据的称为A页面,需要接收数据的称为B页面
+                方法有三种:
+                    1.使用localStorage实现
+                        1.B页面通过给window绑定事件,来监视开发者是否有存储localStorage这个操作
+                            事件源:window   事件名:storage
+                        2.A页面通过localStorage.setItem方法,将数据存储到localStorage中
+                        3.此时,B页面的storage事件就会触发,然后自动执行对应的回调函数代码
+
+                        优点:
+                            1.传输的数据量比较大
+                            2.该方法可以实现多次传参,传参方便
+                        缺点:
+                            1.只能适用于两个标签页的域名相同才能通信
+
+                    2.通过URL实现
+                        1.A页面在跳转到B页面的时候,在B页面的URL中拼接相关参数
+                        2.到达B页面之后,B页面可以通过location对象,获取到URL中的相关参数
+
+                        优点:
+                            1.可以无视域名,即便两个域名不相同,可以实现数据通信
+                        缺点:
+                            1.由于URL具有长度限制,所以传递的数据量比较小
+                            2.该方案想要传参,一定会伴随着跳转操作,也就是跳转一次只能传一次数据
+
+                    3.使用domain属性
+                        1.B页面将自己的document.domain属性,修改为A,B页面的共同上级域名
+                        2.B页面使用window.open方法,打开A页面,此时open方法的返回值就是A页面的window对象,简称w1
+                        3.A页面成功打开,并将自己的document.domain属性进行修改,修改为A,B页面的共同上级域名
+                        4.A页面可以在自己的window对象身上添加属性,存储数据
+                        5.B页面就可以通过流程2得到的w1对象,获取和修改A页面的window身上的数据
+
+                        优点:
+                            1.存储数据量最大,因为window对象没有数据大小限制
+                        缺点:
+                            1.只能在同一家公司的域名下才能使用
+
+
+    
+    */
+    </script>
+</body>
+</html>
