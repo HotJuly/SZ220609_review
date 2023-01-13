@@ -20,4 +20,95 @@
 <script src="./js/md5.js"></script>
 <script src="./js/axios.js"></script>
 <script>
+  // 其实大文件上传的原理:就是将一个大的文件,切割成为多个小的文件进行上传
+  // 理论上,请求体发送数据,数据大小可以无限大,但是服务器那边只允许一个请求最多传递2MB的数据
+
+  $('#uploaderInput').on('change',function(){
+    // console.log(this.files)
+    // 用于获取到用户读取,准备上传的文件数据
+    const file = this.files[0];
+
+    uploadOne(file);
+  });
+
+  async function uploadOne(file){
+    if(!file)return;
+
+    // hash值是每个文件的唯一标识,他是根据文件内容编译得到的一串字符串
+    // 如果两个文件的内容相同,得到的hash值就会相同,反之,两个文件不同,hash值绝对不同
+    // 目的:是为了方便服务器检查文件内容是否有缺失
+    const hash = await getHash(file);
+    // console.log(hash)
+
+    let filename = file.name;
+    const i = filename.lastIndexOf('.');
+
+    // 这行代码是服务器要求的,需要在名字中拼接发送文件时候的时间戳
+    filename = filename.slice(0,i) + new Date().getTime() + filename.slice(i);
+
+    // 存储当前文件总大小
+    const size = file.size;
+
+    const shareSize = 2*1024*1024;
+
+    const total = Math.ceil(size/shareSize);
+
+    // 代表当前已经发送了多少份
+    let index = 0;
+
+    upload();
+
+    // 该函数用于上传一部分文件
+    async function upload(){
+
+      const start = index * shareSize;
+      const end = (index+1) * shareSize > size ? size : (index+1) * shareSize;
+
+      // 由于文件本身就是二进制存储,所以文件对象具有slice方法,可以直接切割出部分文件内容
+      const data = file.slice(start,end);
+
+      const formData = new FormData();
+      formData.append('hash',hash);
+      formData.append('total',total);
+      formData.append('index',index);
+      formData.append('data',data);
+      formData.append('filename',filename);
+
+      const result = await axios.post('/uploadVideo',formData);
+
+      index++;
+
+      if(index<total){
+        // console.log('文件还在上传',result)
+        $('#process').text(result.data.process)
+        upload();
+      }else{
+        // console.log('文件上传结束',result)
+        $('#process').text(result.data.msg);
+        $('#videoContent').css("visibility","visible");
+        $('#video').attr("src",result.data.videoUrl);
+      }
+    }
+  }
+
+  function getHash(file){
+    return new Promise((resolve)=>{
+      const fileReader = new FileReader();
+
+      // 该方法,可以将读取到的文件内容,编译成base64格式的字符串
+      fileReader.readAsDataURL(file);
+
+      // 当该文件读取结束之后,会触发load事件,并执行回调函数
+      fileReader.onload=function(e){
+        // console.log(e)
+        // 获取到编译完之后的base64字符串
+        const data = e.target.result;
+
+        // hex_md5方法会根据传入的字符串数据,编译得到一个唯一的hash值
+        const hash = hex_md5(data);
+
+        resolve(hash);
+      }
+    })
+  }
 </script>
