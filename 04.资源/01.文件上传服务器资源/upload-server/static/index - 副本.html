@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>上传文件</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+  </head>
+
+  <body>
+    <input type="file" id="uploaderInput" multiple="multiple" />
+    <div id="videoContent" style="visibility:hidden">
+      <video id="video" src="" style="width:400px" muted autoplay controls></video>
+    </div>
+    进度:
+    <div id="process">0</div>
+  </body>
+</html>
+<script src="./js/jquery-1.12.4.js"></script>
+<script src="./js/md5.js"></script>
+<script src="./js/axios.js"></script>
+<script>
+  $('#uploaderInput').on('change',function(){
+    console.log(this.files)
+
+    const file = this.files[0];
+
+    uploadOne(file);
+  })
+
+  async function uploadOne(file){
+
+    const hash = await getHash(file);
+
+    const i = file.name.lastIndexOf('.');
+
+    const filename = file.name.slice(0,i) + new Date().getTime() + file.name.slice(i);
+
+    const shareSize = 2*1024*1024;
+
+    const size = file.size;
+
+    const total = Math.ceil(size / shareSize);
+
+    let success = 0;
+
+    let index = 0;
+
+    upload();
+
+    async function upload(){
+
+      let start = index * shareSize;
+
+      let end = (index+1) * shareSize > size?size:(index+1) * shareSize;
+
+      const data = file.slice(start,end);
+
+      const formData = new FormData();
+      formData.append('hash',hash);
+      formData.append('total',total);
+      formData.append('index',index);
+      formData.append('data',data);
+      formData.append('filename',filename);
+
+      const result = await axios.post('/uploadVideo',formData);
+
+      index++;
+
+      if(index<=total-1){
+        $('#process').text(result.data.process);
+        upload();
+      }else{
+        console.log('upload success')
+        $('#process').text(result.data.msg);
+        $('#videoContent').css("visibility","visible");
+        $('#video').attr("src",result.data.videoUrl)
+      }
+    }
+  }
+
+  function getHash(file){
+    return new Promise((resolve)=>{
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload=function(e){
+        const hash = hex_md5(e.target.result);
+        resolve(hash);
+      }
+    })
+  }
+</script>

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <input type="file" id="file"/>
+    <img id="image">
+    <script src="https://cdn.bootcss.com/axios/0.19.0-beta.1/axios.js"></script>
+    <script>
+        // console.log(axios)
+        /*
+            整个js中,想要读取用户的文件,只有通过input[type=file]标签才能实现
+        
+            流程:
+                1.在页面上创建一个input框,type类型是file
+                2.通过js代码,找到页面上的input框,并且给他绑定事件,事件名称change
+                    change事件可以监视用户读取文件操作
+                3.通过回调函数中的this.files[0],可以获取到当前用户准备上传的文件
+                4.创建FormData对象,并将文件数据放入该对象中
+                    注意:属性名是file,这是后端规定的,不能乱写
+                5.使用axios.post将当前准备好的formData对象发送给服务器
+        */
+       var file = document.querySelector('#file');
+       file.onchange = async function(){
+        // 只要用户选择文件成功之后,文件会被读取到浏览器的内存中
+        // 此时浏览器会触发input框的change事件
+
+        // console.log(this.files)
+
+        var data = this.files[0];
+
+        var formData = new FormData();
+
+        formData.append('file',data);
+
+        var result = await axios.post('http://localhost:3000/upload',formData);
+        // console.log(result)
+
+        var image = document.querySelector('#image');
+        image.src=`http://localhost:3000${result.data}`
+       }
+    </script>
+</body>
+</html>

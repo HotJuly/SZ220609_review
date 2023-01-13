@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <h1 id="h1">我是H1</h1>
+    <script>
+      /*
+        防抖和节流
+            1.他们是什么?
+                他们都是一种性能优化的方案,简单来说他们就是一种书写代码的技巧
+                他们的目的都是为了减少某个函数在一段时间之内的触发频率
+
+                节流
+                    节流就是在一段时间之内,用户连续触发多次相同操作,最终只有第一次生效
+
+                防抖
+                    防抖就是在一段时间之内,用户连续触发多次相同操作,最终只有最后一次生效
+
+            2.为什么使用他们?
+                降低某些函数的触发频率,可以实现减少对后端的无用请求次数
+                    这样可以降低服务器高并发压力,算是性能优化的一种
+
+            3.怎么实现他们?
+                如下所示
+
+            4.防抖和节流的区别
+                1.执行函数时机不同
+                    节流是第一次会被执行,后续不执行
+                    防抖是最后一次执行,会自动取消上一次执行
+
+                2.数据的时效性
+                    节流
+                        由于节流会在多次触发中,第一次执行,所以他只能收集到第一次的数据(旧数据)
+
+                    防抖
+                        由于防抖会在多次触发中,最后一次执行,所以他能收集到当前最新的数据
+
+            5.使用场景
+                    节流
+                        在登录页面,用户点击登录按钮的时候可以使用
+                        使用原因:因为用户不可能在极端的事件内,多次点击登录按钮,还能同时修改用户个人数据
+
+                    防抖
+                        在搜索页面,用户在搜索框里面,实现单词联想功能
+                        使用原因:因为用户可能连续多次触发input事件,然而用户实际上想要搜索的是最后输入的结果
+
+        
+    */
+      var h1 = document.querySelector("#h1");
+    //   h1.onclick = fn;
+    //   h1.onclick = throttle(fn,2000);
+      h1.onclick = debounce(fn,2000);
+
+      function fn() {
+        console.log("h1点击成功",this);
+      }
+
+    //   节流操作
+      function throttle(callback,delay){
+        let start = 0;
+        return function(event){
+            if(Date.now() - start > delay){
+                callback.call(this,event);
+                start = Date.now();
+            }
+        }
+      }
+
+    //   防抖操作
+      function debounce(callback,delay){
+        let timer;
+        return function(event){
+            if(timer){
+                clearTimeout(timer);
+            }
+            timer = setTimeout(()=>{
+                callback.call(this,event);
+                timer = null;
+            },delay)
+        }
+      }
+
+    </script>
+  </body>
+</html>
