@@ -1,6 +1,10 @@
 <template>
   <div id="app">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <!-- <input type="text" v-model="msg"> -->
+    <input type="text" :value="msg" @input="(event)=>msg=event.target.value">
+
+    <HelloWorld v-model="msg" />
+    <!-- <HelloWorld :value="msg" @input="(data)=>msg=data"/> -->
   </div>
 </template>
 
@@ -9,6 +13,11 @@ import HelloWorld from './components/HelloWorld.vue'
 
 export default {
   name: 'App',
+  data() {
+    return {
+      msg: 666
+    }
+  },
   components: {
     HelloWorld
   }
@@ -16,4 +25,5 @@ export default {
 </script>
 
 <style>
+
 </style>
