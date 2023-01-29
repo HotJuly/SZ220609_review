@@ -44,8 +44,7 @@ function MVVM(options) {
         4.并将这些属性都变为访问描述符,让他们具有get/set方法(代表该属性没有value值)
           如果开发者读取该属性的值,就会自动执行get方法,并读取vm._data中的同名属性的值进行返回
           如果开发者修改该属性的值,就会自动执行set方法,并修改vm._data中同名属性的值
-  
-  
+
   */
 
   Object.keys(data).forEach(function (key) {
@@ -57,7 +56,52 @@ function MVVM(options) {
   //   vm._proxy("msg");
   // });
 
+  /*
+    响应式
+    需求:当某个属性值被修改的时候,页面需要展示出最新的结果
+    拆解:
+      1.当某个属性值被修改的时候
+        绑定事件监听
+          通过Object.defineProperty可以将某些属性变成具有get/set方法
+            通过set方法,可以监视用户是否有修改该属性值
+
+      2.页面需要展示出最新的结果
+        通过一阶段所学的DOM的增删改查,可以找到页面上具体的某个节点,在对其进行DOM操作
+  
+  */
+
+  /*
+    MVVM源码第二部分:数据劫持
+    劫持:控制人身自由,强迫他人做一些他们不想做的事情
+    目的:
+      明面上的目的:为了将data中,所有的属性都变成具有get/set方法的访问描述符
+      最终目的:将data中所有的属性重写之后,Vue就可以通过set方法监视到用户修改属性值的操作
+              从而可以通知DOM进行更新
+    次数:4次(数据劫持的次数与data对象中具有的属性名个数有关)
+    流程:
+      1.调用observe方法,并将data对象以及当前组件实例对象vm传入
+      2.在observe方法中,会对传入的data进行判断
+        如果data有值,而且是一个对象才会继续new Observer,否则直接return
+      3.在Observer构造调用中,会调用this.walk方法
+      4.在walk方法中,使用Object.keys获取到data对象所有直系属性名组成的数组,并对其进行遍历
+      5.遍历的时候,每个属性名都会调用一次defineReactive方法
+      6.在defineReactive方法中,
+        -创建一个全新的dep对象
+        -会将当前的属性值,传给observer进行深度数据劫持
+        -调用Object.defineProperty方法,对data身上所有的属性进行重写操作
+          将所有的属性都变成get/set方法,但是Vue使用了闭包,将原本应该丢失的value值进行了缓存
+          如果用户读取该属性的值,就会执行get方法,将闭包缓存的value进行返回
+          如果用户修改该属性的值,就会执行set方法,
+            -判断新旧值是否相同,如果相同就什么都不做
+            -将新值放入到闭包中,留给下次使用
+            -将新值传入observe中,对其进行深度数据劫持操作
+            -通过调用dep.notify方法,通知DOM进行更新
+
+
+
+  */
   observe(data, this);
+  // observe(data, vm);
 
   this.$compile = new Compile(options.el || document.body, this);
 }
