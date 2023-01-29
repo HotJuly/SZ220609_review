@@ -11,8 +11,9 @@ export default {
     msg: String
   },
   mounted(){
-    // console.log(this.$props,this.$attrs)
-    console.log(this.$listeners)
+    // console.log('hello',this.$props)
+    // console.log(this.$parent.msg1)
+    // console.log(this.$root.msg2)
   }
 }
 </script>

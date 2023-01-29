@@ -1,29 +1,32 @@
 <template>
   <div id="app">
-    <!-- <input type="text" v-model="msg"> -->
-    <input type="text" :value="msg" @input="(event)=>msg=event.target.value">
-
-    <HelloWorld v-model="msg" />
-    <!-- <HelloWorld :value="msg" @input="(data)=>msg=data"/> -->
+    <!-- <HelloWorld a="1" b="2" c="3" msg="Welcome to Your Vue.js App" @abc="" @ddd=""/> -->
+    
+    <HintButton title="你真的要删除吗?" size="small" type="danger" @click="click1"/>
+    <HintButton title="你确定要新增吗?" size="big" type="primary" @click="click2"/>
   </div>
 </template>
 
 <script>
 import HelloWorld from './components/HelloWorld.vue'
+import HintButton from './components/HintButton.vue';
 
 export default {
   name: 'App',
-  data() {
-    return {
-      msg: 666
-    }
-  },
   components: {
-    HelloWorld
+    HelloWorld,
+    HintButton
+  },
+  methods:{
+    click1(){
+      console.log(1)
+    },
+    click2(){
+      console.log(2)
+    }
   }
 }
 </script>
 
 <style>
-
 </style>
