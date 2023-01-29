@@ -1,6 +1,6 @@
 <template>
   <div class="hello">
-    <h1 @click="handler">hello的msg:{{ msg }}</h1>
+    <h1>{{ msg }}</h1>
   </div>
 </template>
 
@@ -10,20 +10,13 @@ export default {
   props: {
     msg: String
   },
-  methods: {
-    handler() {
-      this.$emit('update:msg', "我是修改之后的数据")
-    }
-  },
   mounted(){
-    this.$bus.$on('sendMsg',function(data){
-      console.log('sendMsg',data)
-    });
+    // console.log(this.$props,this.$attrs)
+    console.log(this.$listeners)
   }
 }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-
 </style>
