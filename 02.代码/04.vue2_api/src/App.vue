@@ -1,56 +1,88 @@
 <template>
   <div id="app">
     <!-- <HelloWorld msg="Welcome to Your Vue.js App"/> -->
-    <!-- <A v-if="isShow"/>
-    <B v-else/> -->
+    <router-link to="/a">显示A</router-link>
+    <router-link to="/b">显示B</router-link>
 
-    <!-- <A v-if="isShow===0"/>
-    <B v-if="isShow===1"/> -->
+    <!-- <transition name="fade">
+      <router-view></router-view>
+    </transition> -->
 
-    <!-- <component :is="showComponent"></component>
-    <button @click="handler">切换</button> -->
+    <!-- <keep-alive exclude="A">
+      <A v-if="isShow" />
+      <B v-else />
+    </keep-alive> -->
 
     
-    <HelloWorld msg="Welcome to Your Vue.js App">
-      <template>
-        <h1>我是默认插槽</h1>
-      </template>
-      <template v-slot:header>
-        <h1>我是header插槽</h1>
-      </template>
-      <template #footer="scope">
-        <h1>我是footer插槽,{{scope.msg}}</h1>
-      </template>
-    </HelloWorld>
+    <keep-alive>
+      <router-view></router-view>
+    </keep-alive>
+
+    <!-- Vue3写法 
+    
+    
+      <router-view>
+        <keep-alive></keep-alive>
+      </router-view>
+    
+    -->
+
+    <!-- <button @click="isShow = !isShow">切换</button> -->
+
   </div>
 </template>
 
 <script>
 import HelloWorld from './components/HelloWorld.vue'
-import A from './components/A.vue'
-import B from './components/B.vue'
+import A from '@/components/A.vue'
+import B from '@/components/B.vue'
 
 export default {
   name: 'App',
-  data(){
-    return{
-      // isShow:true
-      isShow:0,
-      showComponent:A
+  data() {
+    return {
+      isShow: true
     }
   },
   components: {
     HelloWorld,
-    // A,
-    // B
-  },
-  methods:{
-    handler(){
-      this.showComponent = B;
-    }
+    A,
+    B
   }
 }
 </script>
 
 <style>
+.fade-enter-active,
+.fade-leave-active {
+  transition: transform 4s;
+}
+
+.fade-enter
+
+/* .fade-leave-active below version 2.1.8 */
+  {
+  transform: translateX(100%)
+}
+
+.fade-enter-to
+
+/* .fade-leave-active below version 2.1.8 */
+  {
+  transform: translateX(0)
+}
+
+.fade-leave
+
+/* .fade-leave-active below version 2.1.8 */
+  {
+  transform: translateX(0)
+}
+
+.fade-leave-to
+
+/* .fade-leave-active below version 2.1.8 */
+  {
+  transform: translateX(-100%)
+}
 </style>
