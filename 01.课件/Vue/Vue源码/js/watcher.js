@@ -24,9 +24,7 @@ Watcher.prototype = {
 
     if (value !== oldVal) {
       this.value = value;
-      debugger
       this.cb.call(this.vm, value, oldVal);
-      debugger
     }
   },
   addDep: function (dep) {

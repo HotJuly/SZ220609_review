@@ -142,6 +142,31 @@ function MVVM(options) {
   this.$compile = new Compile(options.el || document.body, this);
   // this.$compile = new Compile("#app", vm);
 
+  /*
+    问题1:请问Vue1中,更新DOM是同步更新还是异步更新?
+    回答:同步更新
+
+    问题2:请问Vue2中,更新DOM是同步更新还是异步更新?
+    回答:异步更新
+      异步指的是微任务
+      Vue2会将更新DOM的方法交给nextTick方法,而nextTick的回调函数会在清空微任务的时候执行
+
+    问题3:请问Vue1中,更新DOM的范围是多大?(整个项目,组件,节点)
+    回答:以节点为单位更新(精确更新)
+
+    问题4:请问Vue2中,更新DOM的范围是多大?(整个项目,组件,节点)
+    回答:以组件为单位更新(范围更新)
+      从表面上来看,Vue2的范围更新方案很可能出现误杀的情况
+        感觉上去,性能不如Vue1的精确更新
+
+      内存消耗上来说,Vue1会给每个插值语法都生成一个对应的watcher对象
+          而Vue2,只会给每个组件生成一个watcher对象
+          内存消耗Vue2更小
+
+      Vue2其实有对可能出现的误杀情况做出优化->虚拟DOM和diff算法
+  
+  */
+
 }
 
 MVVM.prototype = {
