@@ -97,13 +97,32 @@ function MVVM(options) {
             -将新值传入observe中,对其进行深度数据劫持操作
             -通过调用dep.notify方法,通知DOM进行更新
 
-
-
   */
   observe(data, this);
   // observe(data, vm);
 
+  /*
+    MVVM源码第三部分:模板解析
+    目的:获取到开发者的页面内容,作为模版进行解析,将内部的插值语法等内容变成对应的数据进行显示
+    流程:
+      1.将配置对象的el属性传入Compile构造函数中
+      2.在Compile函数中,会根据传入的el进行判断,找到页面上对应的DOM节点
+      3.将el元素中,所有的子节点全部转移到文档碎片中
+      4.调用init方法,开始解析文档碎片中的模版内容
+      5.通过node.childNodes,获取到所有子节点组成的数组,并且遍历该数组
+        -如果子节点是元素节点,就获取他身上所有的标签属性,判断是否有出现指令,并对其进行解析
+        -如果子节点是文本节点,而且文本内容具有插值语法,那么就开始调用bind方法
+        -如果子节点还有后代节点,会对其进行递归操作,进行递归解析,回到流程5
+      6.在bind方法中,
+        -找到对应的更新器函数
+        -调用更新期函数,并传入对应的表达式结果
+        -创建一个watcher对象
+          总结:页面中,每具有一个插值语法,就会创建一个对应的watcher对象
+  
+  
+  */
   this.$compile = new Compile(options.el || document.body, this);
+  // this.$compile = new Compile("#app", vm);
 }
 
 MVVM.prototype = {

@@ -70,7 +70,7 @@ Observer.prototype = {
         // 此处Vue通过闭包的形式,将当前属性的值进行了保存
         //  这样就实现了一个属性,既有get/set方法,同时还不丢失原先的value值
 
-        // Object.defineProperty(this._data, "msg", {
+        // Object.defineProperty(vm._data, "msg", {
         //     enumerable: true, // 可枚举
         //     configurable: false, // 不能再define
 
