@@ -8,6 +8,7 @@
     <div id="app">
       <p class="b">{{msg}}</p>
       <p class="b">{{person.name}}</p>
+      <p class="b">{{arr.1}}</p>
     </div>
     <script src="./js/observer.js"></script>
     <script src="./js/watcher.js"></script>
@@ -21,12 +22,32 @@
           person:{
             name:"xiaoming",
             msg:"123"
-          }
+          },
+          arr:[5,6,7,8]
         }
       });
 
       setTimeout(()=>{
-        vm.msg="hello 6666666"
+        // vm.msg="hello 6666666"
+
+        // vm.person.name="laowang";
+        /*
+          1.js通过作用域查找到vm变量,并获取到存储的值->组件实例对象
+          2.通过vm实例对象,读取person属性,由于person属性是数据代理添加的属性
+            所以此处会触发数据代理的get方法
+          3.由于触发了person的get方法,在get方法中,会找data对象获取到他的person属性值
+            由于data中所有的属性都经过数据劫持操作,所以该操作会触发person数据劫持的get方法
+          4.根据流程4,最终js会返回内存中的person对象
+          5.接着,会对person对象的name属性进行赋值操作,
+            由于person对象也经过了数据劫持,所以此处会触发name属性的数据劫持的set方法
+
+          总结:以上操作,一共触发了一次数据代理,两次数据劫持
+        
+        
+        */
+       
+        vm.arr[1] = 10;
+        console.log(vm.arr)
       },2000)
 
       /*
