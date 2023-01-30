@@ -127,11 +127,19 @@ function Dep() {
 
 Dep.prototype = {
     addSub: function(sub) {
+      // dep.addSub(watcher);
+
+    //   此处dep对象在收集与自己相关的watcher对象
+    //  当前响应式属性已经收集到了,使用到他的插值语法
         this.subs.push(sub);
+        // dep.subs.push(watcher);
     },
 
     depend: function() {
+        // this->dep对象
+
         Dep.target.addDep(this);
+        // watcher.addDep(dep);
     },
 
     removeSub: function(sub) {

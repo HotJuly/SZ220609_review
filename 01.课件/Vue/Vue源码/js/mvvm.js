@@ -67,6 +67,24 @@ function MVVM(options) {
 
       2.页面需要展示出最新的结果
         通过一阶段所学的DOM的增删改查,可以找到页面上具体的某个节点,在对其进行DOM操作
+
+
+    准备工作:
+      1.在bind方法中,会调用Watcher函数,创建watcher实例对象
+      2.在Watcher函数中,会调用get方法,用于获取到当前插值语法的结果
+      3.在get方法中,会将Dep.target修改为当前这个watcher对象
+      4.并且调用getVMVal方法,获取插值语法的表达式结果,在这个过程中,会触发数据劫持的get方法
+      5.在数据劫持的get方法中,由于Dep.target已经有值,所以会执行dep.depend方法
+      6.在depend方法中,会调用watcher对象的addDep方法,让watcher对象收集到与自身相关的dep对象
+      7.在addDep方法中,会调用dep对象的addSub方法,让dep对象收集到与自身相关的watcher对象
+
+    流程:
+      1.开发者修改响应式属性的值,会触发数据代理的set方法
+      2.在数据代理的set方法中,会同步修改data对象中的同名属性的值,会触发该属性的数据劫持的set方法
+      3.在数据劫持的set方法中,会调用dep.notify方法,通知对应的watcher进行更新(其实就是调用watcher的update方法)
+      4.在update方法中,
+        -使用watcher.get方法,获取到当前表达式的最新结果
+        -比较新旧两次的结果,如果不相同才会调用cb函数,对页面的节点进行更新
   
   */
 
@@ -123,6 +141,7 @@ function MVVM(options) {
   */
   this.$compile = new Compile(options.el || document.body, this);
   // this.$compile = new Compile("#app", vm);
+
 }
 
 MVVM.prototype = {
