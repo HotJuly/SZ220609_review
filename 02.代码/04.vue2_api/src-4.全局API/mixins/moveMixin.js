@@ -30,5 +30,8 @@ export default {
         this.pageX = clientX;
         this.pageY = clientY;
       }
-    }
+    },
+    beforeDestroy() {
+      document.removeEventListener('mousemove',this.moveHandler)
+    },
 }
