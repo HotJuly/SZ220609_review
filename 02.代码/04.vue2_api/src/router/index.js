@@ -7,7 +7,7 @@ import About from '@/components/About.vue'
 Vue.use(VueRouter);
 
 export default new VueRouter({
-    mode:"hash",
+    mode:"history",
     routes:[
         {
             path:"/about",

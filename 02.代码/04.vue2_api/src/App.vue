@@ -3,7 +3,7 @@
     <!-- <HelloWorld msg="Welcome to Your Vue.js App"/> -->
     <header v-show="$route.meta.showHeader">123</header>
     <router-view></router-view>
-    <router-link to="/home">toHome</router-link>
+    <router-link tag="h1" to="/home" :replace="true">toHome</router-link>
     <!-- <router-link to="/about">toAbout</router-link> -->
     <button @click="toAbout">toAbout</button>
   </div>
@@ -21,6 +21,7 @@ export default {
     toAbout(){
       // this.$router.push('/about');
       this.$router.replace('/about');
+      console.log(this.$router)
     }
   }
 }
