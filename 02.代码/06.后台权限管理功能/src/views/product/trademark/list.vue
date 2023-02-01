@@ -1,6 +1,7 @@
 <template>
   <div>
-    <el-button style="margin-top: 20px" type="primary" icon="el-icon-plus" @click="showDialog">添加</el-button>
+    <!-- <el-button v-if="$store.state.user.buttons.includes('btn.Trademark.add123')" style="margin-top: 20px" type="primary" icon="el-icon-plus" @click="showDialog">添加</el-button> -->
+    <el-button v-has="'btn.Trademark.add'" style="margin-top: 20px" type="primary" icon="el-icon-plus" @click="showDialog">添加</el-button>
     <!-- 
       border->用于让整个table表格添加边框
       el-table组件用于生成整个表格
@@ -27,8 +28,8 @@
       </el-table-column>
       <el-table-column label="操作">
         <template slot-scope="{row}">
-          <el-button type="warning" size="mini" icon="el-icon-edit" @click="showDialog(row)">编辑</el-button>
-          <el-button type="danger" size="mini" icon="el-icon-delete" @click="deleteAttr(row)">删除</el-button>
+          <el-button v-has="'btn.Trademark.update'" type="warning" size="mini" icon="el-icon-edit" @click="showDialog(row)">编辑</el-button>
+          <el-button v-has="'btn.Trademark.remove'" type="danger" size="mini" icon="el-icon-delete" @click="deleteAttr(row)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
