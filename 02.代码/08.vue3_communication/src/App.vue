@@ -1,6 +1,15 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <HelloWorld msg="Welcome to Your Vue.js App">
+    <template #default>
+      <h1>我是默认插槽</h1>
+    </template>
+    <template #header>
+      <h1>我是具名插槽header</h1>
+    </template>
+    <template #footer="scope">
+      <h1>我是作用域插槽footer,{{scope.msg}}</h1>
+    </template>
+  </HelloWorld>
 </template>
 
 <script>
@@ -14,13 +23,9 @@ export default {
 }
 </script>
 
+<script setup>
+
+</script>
+
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
 </style>
