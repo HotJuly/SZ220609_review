@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        let obj = {
+            name:"xiaoming"
+        }
+
+        // Object.defineProperty(obj,"name",{
+        //     get(){
+        //         console.log('get success');
+        //         return 123;
+        //     },
+        //     set(newVal){
+        //         console.log('set success',newVal);
+        //     }
+        // })
+
+        // obj.name="xiaowang";
+        // obj.age = 23;
+        // console.log(obj.name)
+
+        // delete obj.name;
+        // console.log(obj.age)
+
+        /*
+            Vue2中的问题:
+                1.新增属性不具有响应式效果
+                    因为普通属性想要变成响应式属性,必须经过数据劫持,但是obj.age = 23;操作,并没有触发数据劫持
+                    简单点说,就是Vue不知道你做了这个事情
+                    所以最终,Vue2推出了this.$set方法用于解决该问题
+
+                2.删除属性不具有响应式效果
+                    因为Object.defineProperty方法,只能监视一个属性的修改和读取,无法监视他的删除操作
+                    简单点说,就是Vue不知道你做了这个事情
+                    所以最终,Vue2推出了this.$delete方法用于解决该问题
+
+                3.直接通过数组下标修改属性值,不具有响应式效果
+                    Vue其实有能力做到下标也具有响应式效果,但是出于性能的考虑,尤大大才决定不对其进行数据劫持
+                    但是,如果数组内部存放的都是对象,那么这些对象还是会被数据劫持
+        
+        */
+
+        // 在Vue3中,又一个方法叫做reactive
+        // 语法:const proxyObj = reactive(元对象);
+        // 不要操作元对象,因为这样代理对象监视不到
+        const proxyObj = new Proxy(obj, {
+            get(){
+                console.log('get success');
+                return 123;
+            },
+            set(target,key,value){
+                // console.log('set success',target,key,value);
+                Reflect.set(target,key,value);
+                target[key]=value;
+                // Vue3会在这里调用dep.notify()通知DOM跟你更新
+            },
+            deleteProperty(){
+                console.log('deleteProperty success');
+                // Reflect.deleteProperty(target,key);
+            },
+            getPrototypeOf(){
+                return {
+                    name:"laowang"
+                }
+            },
+            has(){
+                return true;
+            }
+        })
+
+        // obj.name="laowang";
+        // proxyObj.name="laowang";
+        proxyObj.age=666;
+        console.log(obj)
+        // delete proxyObj.name;
+        console.log(proxyObj)
+
+        // Proxy方法没有要求必须监视某个属性,他只是监视用户对代理对象的所有操作
+
+        // console.log(Object.getPrototypeOf(proxyObj))
+        // console.log("abcdshjkadghasjkdhklas" in proxyObj)
+    </script>
+</body>
+</html>
